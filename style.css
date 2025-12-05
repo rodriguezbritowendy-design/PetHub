@@ -1,0 +1,315 @@
+/* ============================
+   ESTILO BASE (COLORES NUEVOS)
+   ============================ */
+
+:root {
+    --bg-dark: #0e1125;
+    --bg-panel: rgba(255, 255, 255, 0.10);
+    --bg-panel-strong: rgba(255, 255, 255, 0.18);
+    --blur: 18px;
+
+    --accent: #8A2BFF;
+    --accent-light: #B169FF;
+
+    --text-main: #ffffff;
+    --text-muted: #bfc7df;
+}
+
+* {
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: var(--bg-dark);
+    color: var(--text-main);
+    overflow-x: hidden;
+}
+
+/* ============================
+   LAYOUT
+   ============================ */
+
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 260px;
+    background: #0B0E1D;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+.main-content {
+    flex: 1;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+}
+
+/* ============================
+   PANEL GLASS
+   ============================ */
+
+.panel {
+    background: var(--bg-panel);
+    backdrop-filter: blur(var(--blur));
+    padding: 22px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+.panel-head h2,
+.panel-head h3 {
+    font-weight: 700;
+}
+
+.panel-body {
+    margin-top: 10px;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+/* ============================
+   MAPA — ARREGLADO
+   ============================ */
+
+.map-panel {
+    padding: 0;
+}
+
+#map {
+    height: 400px;
+    width: 100%;
+    border-radius: 18px;
+}
+
+.map-panel .panel-head {
+    padding: 18px 22px;
+}
+
+/* ============================
+   INPUTS Y BOTONES
+   ============================ */
+
+input, select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+}
+
+.btn {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    font-weight: 600;
+    background: var(--accent);
+    cursor: pointer;
+}
+.btn:hover {
+    background: var(--accent-light);
+}
+
+.btn-sec {
+    background: rgba(255,255,255,0.22);
+}
+.btn-sec:hover {
+    background: rgba(255,255,255,0.32);
+}
+
+.row {
+    display: flex;
+    gap: 12px;
+}
+
+/* ============================
+   FORECAST
+   ============================ */
+
+.forecast-row {
+    margin-top: 12px;
+    display: flex;
+    gap: 12px;
+}
+
+.forecast-card {
+    background: var(--bg-panel-strong);
+    padding: 12px;
+    border-radius: 12px;
+    width: 110px;
+    text-align: center;
+}
+
+/* ============================
+   SHARE BOX
+   ============================ */
+
+.share-box {
+    margin-top: 12px;
+    padding: 16px;
+    background: rgba(0,0,0,0.35);
+    border-radius: 16px;
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.share-buttons a {
+    padding: 8px 12px;
+    background: var(--accent);
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+/* ============================
+   RESPONSIVE
+   ============================ */
+
+@media(max-width: 1100px){
+    .grid-3 {
+        grid-template-columns: 1fr;
+    }
+    #map {
+        height: 300px;
+    }
+}
+/* Estilo del SELECT */
+select {
+    background-color: #2e2f3a !important;
+    color: #fff !important;
+    border: 1px solid #555 !important;
+    border-radius: 8px;
+    padding: 8px;
+    outline: none;
+}
+
+/* Estilo del menú desplegable (opciones) */
+select option {
+    background-color: #2e2f3a !important;
+    color: #fff !important;
+}
+
+/* Cuando se abre en algunos navegadores */
+select:focus {
+    background-color: #3a3b47 !important;
+}
+
+/* Compatibilidad con navegadores Webkit */
+select::-ms-expand {
+    display: none;
+}
+/* -----------------------------
+   LOGIN PAGE STYLES
+------------------------------*/
+
+.login-body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #0a0f2c, #1b1f3b, #26294d);
+    font-family: "Poppins", sans-serif;
+    color: white;
+}
+
+.login-box {
+    width: 380px;
+    padding: 35px;
+    border-radius: 20px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.login-title {
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    font-size: 15px;
+}
+
+.input-group input:focus {
+    background: rgba(255,255,255,0.25);
+}
+
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: #7b2cff;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.btn-login:hover {
+    background: #9d55ff;
+}
+
+.error-msg {
+    margin-top: 12px;
+    color: #ff7070;
+    font-size: 14px;
+    display: none;
+}
+/* === CONTADOR DE VISITAS === */
+.visitas-box {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    background: rgba(20, 20, 20, 0.65);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.25);
+    font-size: 16px;
+    font-weight: bold;
+    backdrop-filter: blur(8px);
+    z-index: 999999;
+}

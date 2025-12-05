@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mini Portal - Dashboard (Glass UI)</title>
+
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+
+<body>
+
+    <!-- === CONTADOR VISIBLE === -->
+  <div id="visitasCaja" class="visitas-box glass">
+    👁 Visitas: <span id="contadorVisitas">Cargando...</span>
+</div>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <!-- MAPA -->
+        <div id="map" class="map-full" style="height: 520px; width: 100%;"></div>
+
+        <!-- GRID -->
+        <section class="grid-3">
+
+            <!-- CLIMA -->
+            <div class="panel glass">
+                <div class="panel-head">
+                    <h3>⛅ Clima</h3>
+                    <div class="small muted">Buscar y mostrar pronóstico</div>
+                </div>
+
+                <div class="panel-body">
+
+                    <div class="row">
+                        <input type="text" id="ciudad" placeholder="Ej: Bogotá, CO">
+                        <button class="btn" id="btnBuscarClima">Buscar</button>
+                        <button class="btn btn-sec" id="btnCompartirClima">Compartir</button>
+                    </div>
+
+                    <div id="resultadoClima" class="weather-card-wrapper"></div>
+                    <div id="monedaCiudad" class="moneda"></div>
+
+                    <!-- Share box -->
+                    <div id="shareBox" class="share-box" style="display:none;">
+                        <div id="shareText"></div>
+                        <div class="share-buttons" id="linksCompartir"></div>
+
+                        <div class="share-controls">
+                            <button class="btn small" id="btnCopyShare">📋 Copiar</button>
+                            <button class="btn btn-sec small" id="btnCloseShare">Cerrar</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TRADUCTOR -->
+            <div class="panel glass">
+                <div class="panel-head">
+                    <h3>📝 Traductor</h3>
+                </div>
+
+                <div class="panel-body">
+
+                    <div class="grid-2">
+                        <div>
+                            <label>Origen</label>
+                            <select id="langFrom">
+                                <option value="es">Español</option>
+                                <option value="en">Inglés</option>
+                                <option value="fr">Francés</option>
+                                <option value="de">Alemán</option>
+                                <option value="it">Italiano</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Destino</label>
+                            <select id="langTo">
+                                <option value="en">Inglés</option>
+                                <option value="es">Español</option>
+                                <option value="fr">Francés</option>
+                                <option value="de">Alemán</option>
+                                <option value="it">Italiano</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <input type="text" id="textoTraducir" placeholder="Texto a traducir">
+
+                    <div class="row">
+                        <button class="btn" id="btnTraducir">Traducir</button>
+                        <button class="btn small" id="btnClearTrad">Limpiar</button>
+                    </div>
+
+                    <div id="resultadoTraduccion" class="result-box"></div>
+                </div>
+            </div>
+
+            <!-- PAISES -->
+            <div class="panel glass">
+                <div class="panel-head">
+                    <h3>🌍 Países</h3>
+                </div>
+
+                <div class="panel-body">
+                    <input type="text" id="pais" placeholder="Ej: México, France, Japan">
+
+                    <div class="row" style="margin-bottom:10px;">
+                        <button class="btn" id="btnBuscarPais">Buscar País</button>
+                    </div>
+
+                    <div id="infoPais" class="result-box"></div>
+                    <div id="monedaPais" class="moneda"></div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- CONVERTIDOR -->
+        <section class="panel bottom-panel glass">
+            <div class="panel-head">
+                <h3>💱 Convertidor de Moneda</h3>
+            </div>
+
+            <div class="panel-body row">
+                <input type="number" id="monto" placeholder="Ingresa monto" style="max-width:220px;">
+                <button class="btn" id="btnConvertir">Convertir a USD</button>
+                <div id="resultadoMoneda" style="margin-left:16px;"></div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

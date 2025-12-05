@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetHub: Portal de Servicios para Mascotas</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        header {
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #00bfff;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #00bfff;
+            margin-bottom: 5px;
+        }
+        
+        h2 {
+            color: #008cba;
+            border-left: 5px solid #00bfff;
+            padding: 0 0 0 10px;
+            margin: 25px 0 15px 0;
+        }
+        
+        section {
+            padding: 15px 0;
+        }
+        
+        #intro-p {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .btn {
+            background-color: #00bfff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background-color: #008cba;
+        }
+        
+        .output-box {
+            margin-top: 15px;
+            padding: 10px;
+            background: #e6f7ff;
+            border-left: 5px solid #00bfff;
+            border-radius: 4px;
+        }
+        
+        #map {
+            height: 300px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .vet-icon {
+            background-color: #00bfff;
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .social-share-links {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .social-btn {
+            padding: 8px 12px;
+            border-radius: 4px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        
+        .whatsapp {
+            background-color: #25D366;
+        }
+        
+        .facebook {
+            background-color: #1877F2;
+        }
+        
+        .twitter {
+            background-color: #1DA1F2;
+        }
+        
+        @media (max-width: 600px) {
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🐾 PetHub: Soluciones Digitales para el Cuidado Animal</h1>
+            <p></p>
+        </header>
+
+        <section>
+            <h2>1. Cuidado de las Mascotas</h2>
+            <p id="intro-p">El bienestar y la seguridad de nuestras mascotas son nuestra máxima prioridad. Es fundamental que los dueños tengan acceso a herramientas y recursos que permitan gestionar la salud y la rutina de sus animales de forma eficiente. Esto incluye
+                tener información inmediata sobre servicios de emergencia, recomendaciones diarias adaptadas a las condiciones ambientales y la capacidad de conectarse con una comunidad activa y responsable.</p>
+        </section>
+
+        <section>
+            <h2>2. Registro de Contacto</h2>
+            <form id="registroMascotaForm">
+                <div class="form-group">
+                    <label for="nombreMascota">Nombre de la Mascota:</label>
+                    <input type="text" id="nombreMascota" required>
+                </div>
+                <div class="form-group">
+                    <label for="tipoMascota">Tipo de Animal:</label>
+                    <select id="tipoMascota" required>
+                        <option value="">-- Selecciona --</option>
+                        <option value="Perro">Perro</option>
+                        <option value="Gato">Gato</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="emailDueno">Correo de Notificación:</label>
+                    <input type="email" id="emailDueno" required placeholder="ejemplo@correo.com">
+                </div>
+                <button type="submit" class="btn">Registrar</button>
+            </form>
+            <div id="formMessage" class="message" style="display:none;"></div>
+        </section>
+
+        <section>
+            <h2>3. Servicios de Integración Externa</h2>
+            <div>
+                <h3>📍 i. Localizador de Clínicas Veterinarias</h3>
+                <p>Nuestro servicio de cartografía te permite ubicar la clínica más cercana. Hay más de 10 veterinarias disponibles en nuestra red a nivel nacional.</p>
+                <div id="map"></div>
+                <div class="form-group">
+                    <label for="direccionUsuario">Ingresa tu Dirección (Ej. Calle A, Ecatepec, EdoMex):</label>
+                    <input type="text" id="direccionUsuario" placeholder="Ej: Calle Nuevo León, N33, Col. Granjas Valle de Guadalupe, EdoMex">
+                    <button onclick="encontrarVeterinariaMasCercana()" class="btn">Buscar Veterinaria Cercana</button>
+                </div>
+                <div class="output-box" id="mapaOutput">Mapa cargado. Se muestra la ubicación de la clínica de emergencia más cercana.</div>
+            </div>
+
+            <div class="service-grid">
+                <div>
+                    <h3>☁️ ii. Pronóstico del Clima para el Paseo</h3>
+                    <div class="form-group">
+                        <label for="ciudadClima">Ciudad (Ej. Ecatepec):</label>
+                        <input type="text" id="ciudadClima" placeholder="Ej: Ecatepec, MX" value="Ecatepec, MX">
+                        <button onclick="consultarClima()" class="btn">Consultar Clima</button>
+                    </div>
+                    <div class="output-box" id="climaOutput">Información del clima aparecerá aquí.</div>
+                </div>
+
+                <div>
+                    <h3>📱 iii. Compartir Alertas de Emergencia</h3>
+                    <p>Crea un aviso de emergencia (ej. Mascota Perdida) para compartir en redes sociales de la comunidad.</p>
+                    <button onclick="verRedesSociales()" class="btn">Crear Aviso</button>
+                    <div class="output-box" id="redesOutput">El enlace y los botones para compartir aparecerán aquí.</div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        let map;
+        const veterinarias = [{
+            name: "Clínica PetHub #1 (Ecatepec)",
+            coords: [19.610, -99.055]
+        }, {
+            name: "Clínica PetHub #2 (Naucalpan)",
+            coords: [19.460, -99.200]
+        }, {
+            name: "Clínica PetHub #3 (Tlalnepantla)",
+            coords: [19.580, -99.150]
+        }, {
+            name: "Clínica PetHub #4 (Nezahualcóyotl)",
+            coords: [19.400, -98.980]
+        }, {
+            name: "Clínica PetHub #5 (Tecámac)",
+            coords: [19.680, -98.950]
+        }, {
+            name: "Clínica PetHub #6 (Toluca)",
+            coords: [19.490, -99.500]
+        }, {
+            name: "Clínica PetHub #7 (Chimalhuacán)",
+            coords: [19.350, -99.080]
+        }, {
+            name: "Clínica PetHub #8 (Ixtapaluca)",
+            coords: [19.450, -98.850]
+        }, {
+            name: "Clínica PetHub #9 (Cuautitlán)",
+            coords: [19.700, -99.250]
+        }, {
+            name: "Clínica PetHub #10 (Texcoco)",
+            coords: [19.530, -98.900]
+        }];
+
+        function initMap() {
+            if (map !== undefined) map.remove();
+            const centerCoord = [19.55, -99.00];
+            map = L.map('map').setView(centerCoord, 10);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: ''
+            }).addTo(map);
+
+            const vetIcon = L.divIcon({
+                className: 'vet-icon',
+                html: '🐾',
+                iconSize: [30, 30],
+                iconAnchor: [15, 30]
+            });
+
+            veterinarias.forEach((vet) => {
+                L.marker(vet.coords, {
+                    icon: vetIcon
+                }).addTo(map).bindPopup(`<b>${vet.name}</b>`);
+            });
+        }
+
+        function encontrarVeterinariaMasCercana() {
+            const direccion = document.getElementById('direccionUsuario').value.trim();
+            const output = document.getElementById('mapaOutput');
+
+            if (!direccion) {
+                output.innerHTML = `⚠️ Por favor, ingresa una dirección para iniciar la búsqueda.`;
+                return;
+            }
+
+            const userLat = 19.585;
+            const userLng = -99.100;
+            let clinicaMasCercana = null;
+            let distanciaMinimaCuadrada = Infinity;
+
+            veterinarias.forEach(vet => {
+                const distCuadrada = Math.pow(userLat - vet.coords[0], 2) + Math.pow(userLng - vet.coords[1], 2);
+                if (distCuadrada < distanciaMinimaCuadrada) {
+                    distanciaMinimaCuadrada = distCuadrada;
+                    clinicaMasCercana = vet;
+                }
+            });
+
+            if (clinicaMasCercana) {
+                map.setView(clinicaMasCercana.coords, 14);
+                output.innerHTML = `✅ Búsqueda exitosa para la dirección: <strong>${direccion}</strong>.<br>La veterinaria más cercana es: <strong>${clinicaMasCercana.name}</strong>.`;
+            } else {
+                output.innerHTML = `❌ No se pudo encontrar una clínica cercana.`;
+            }
+        }
+
+        document.getElementById('registroMascotaForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const nombre = document.getElementById('nombreMascota').value.trim();
+            const tipo = document.getElementById('tipoMascota').value;
+            const email = document.getElementById('emailDueno').value.trim();
+            const messageElement = document.getElementById('formMessage');
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (nombre && tipo && emailRegex.test(email)) {
+                messageElement.className = 'message success';
+                messageElement.innerHTML = `✅ ¡Registro completado! ${nombre} (${tipo}) recibirá notificaciones y alertas de emergencia en ${email}.`;
+                this.reset();
+                messageElement.style.display = 'block';
+                setTimeout(() => {
+                    messageElement.style.display = 'none';
+                }, 5000);
+            } else {
+                messageElement.className = 'message error';
+                messageElement.innerHTML = `❌ Error: Por favor, revisa el nombre, el tipo de mascota y asegúrate que el correo tenga el formato correcto (ejemplo@dominio.com).`;
+                messageElement.style.display = 'block';
+            }
+        });
+
+        function consultarClima() {
+            const ciudad = document.getElementById('ciudadClima').value;
+            const output = document.getElementById('climaOutput');
+
+            const tempNum = Math.floor(Math.random() * (28 - 10 + 1)) + 10;
+            const temperatura = tempNum + "°C";
+
+            const condiciones = ["Soleado con Viento 🪁", "Ligeramente Nublado 🌤️", "Lluvias Aisladas 🌧️", "Día Caluroso 🔥", "Brumoso 🌫️"];
+            const condicion = condiciones[Math.floor(Math.random() * condiciones.length)];
+
+            let alerta = "";
+            if (condicion.includes("Lluvias")) {
+                alerta = "Lleva paraguas. ¡Evita mojar a tu mascota!";
+            } else if (condicion.includes("Caluroso")) {
+                alerta = "Alta temperatura, busca sombras y lleva agua.";
+            } else {
+                alerta = "Perfecto para un paseo matutino o vespertino.";
+            }
+
+            output.innerHTML = `<p><strong>Ciudad:</strong> ${ciudad}</p><p><strong>Clima:</strong> ${temperatura}, ${condicion}</p><p><strong>Recomendación:</strong> ${alerta}</p>`;
+        }
+
+        function verRedesSociales() {
+            const output = document.getElementById('redesOutput');
+            const avisoId = Math.random().toString(36).substring(2, 8).toUpperCase();
+            const shareLink = `https://pethub.com/aviso_emergencia?id=${avisoId}`;
+            const shareText = `¡AYUDA! Urgente. Aviso de emergencia PetHub #${avisoId}. Ayuda a compartir este enlace: ${shareLink}`;
+
+            const encodedShareLink = encodeURIComponent(shareLink);
+            const encodedShareText = encodeURIComponent(shareText);
+
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodedShareText}`;
+            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedShareLink}&quote=${encodedShareText}`;
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodedShareText}`;
+
+
+            output.innerHTML = `
+                <p><strong>Aviso de Emergencia Creado:</strong></p>
+                <p>Usa este enlace para publicar el aviso:</p>
+                <p><a href="${shareLink}" target="_blank" style="color: #00bfff;">${shareLink}</a></p>
+                <p style="margin-top: 15px; font-weight: bold;">Compártelo en tu comunidad:</p>
+                <div class="social-share-links">
+                    <a href="${whatsappUrl}" target="_blank" class="social-btn whatsapp">WhatsApp</a>
+                    <a href="${facebookUrl}" target="_blank" class="social-btn facebook">Facebook</a>
+                    <a href="${twitterUrl}" target="_blank" class="social-btn twitter">Twitter/X</a>
+                </div>
+            `;
+        }
+
+        function copyToClipboard(text) {
+            const tempInput = document.createElement("textarea");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            const output = document.getElementById('redesOutput');
+            output.insertAdjacentHTML('beforeend', '<span style="color: #00bfff; margin-left: 10px;">¡Copiado!</span>');
+            setTimeout(() => {
+                output.lastChild.remove();
+            }, 2000);
+        }
+
+        window.onload = initMap;
+    </script>
+</body>
+
+</html>
